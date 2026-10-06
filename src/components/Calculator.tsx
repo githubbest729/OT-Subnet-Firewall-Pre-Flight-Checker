@@ -35,9 +35,22 @@ const Row = ({ k, v }: { k: string; v: string }) => (
 function AddToZone({ cidr }: { cidr: string }) {
   const zones = useStore((s) => s.project.zones);
   const updateZone = useStore((s) => s.updateZone);
+  const setTab = useStore((s) => s.setTab);
   const [zoneId, setZoneId] = useState('');
+
+  // The new empty state
+  if (zones.length === 0) {
+    return (
+      <div className="mt-4">
+        <Btn variant="primary" onClick={() => setTab('topology')}>
+          Create a zone in Topology to add subnets
+        </Btn>
+      </div>
+    );
+  }
+
+  // The existing dropdown logic if zones exist
   const chosen = zones.find((z) => z.id === zoneId);
-  if (zones.length === 0) return null;
   return (
     <div className="mt-4 flex gap-2">
       <Select aria-label="Zone" value={zoneId} onChange={(e) => setZoneId(e.target.value)}>
