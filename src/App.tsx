@@ -50,6 +50,46 @@ function ProjectsSheet({ onClose }: { onClose: () => void }) {
   );
 }
 
+
+// Add this near your ProjectsSheet function in App.tsx
+
+function WelcomeOverlay({ onClose }: { onClose: () => void }) {
+  const { createProject, loadDemo } = useStore();
+  
+  const handleDemo = async () => {
+    await loadDemo();
+    onClose();
+  };
+
+  const handleBlank = async () => {
+    await createProject();
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-4 font-sans" role="dialog">
+      <div className="w-full max-w-lg rounded-xl border-2 border-ink bg-white p-8 text-center shadow-2xl">
+        <div className="mx-auto mb-4 grid h-20 w-20 place-items-center rounded-full bg-signal text-ink">
+          <ShieldCheck size={40} strokeWidth={2.5} />
+        </div>
+        <h1 className="mb-2 text-3xl font-bold">Welcome to OT Pre-Flight</h1>
+        <p className="mb-8 text-lg font-semibold text-ink/80">
+          Map your network architecture and catch routing or IEC 62443 firewall faults before you connect the cables.
+        </p>
+        <div className="flex flex-col gap-3">
+          <Btn variant="primary" className="h-16 text-lg" onClick={handleDemo}>
+            Explore the Demo Project
+          </Btn>
+          <Btn className="h-16 text-lg" onClick={handleBlank}>
+            Start a Blank Project
+          </Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 export default function App() {
   const { ready, init, project, tab, setTab, saveState } = useStore();
   const [sheet, setSheet] = useState(false);
@@ -66,6 +106,39 @@ export default function App() {
   const portErrors = v.findings.filter((f) => f.category === 'port' && f.severity === 'error').length;
   const badge = (id: Tab) => (id === 'dashboard' ? v.counts.error : id === 'ports' ? portErrors : 0);
 
+  export default function App() {
+  const { ready, init, project, tab, setTab, saveState } = useStore();
+  const [sheet, setSheet] = useState(false);
+  // 1. Check if it's a first visit
+  const [showWelcome, setShowWelcome] = useState(false);
+  
+  useEffect(() => {
+    void init().then(() => {
+      // Show if it's an empty state AND they haven't dismissed it before
+      if (project.zones.length === 0 && !localStorage.getItem('welcomed')) {
+        setShowWelcome(true);
+      }
+    });
+    void navigator.storage?.persist?.();
+  }, [init, project.zones.length]);
+
+  const dismissWelcome = () => {
+    localStorage.setItem('welcomed', '1');
+    setShowWelcome(false);
+  };
+
+  // ... your existing code ...
+
+  return (
+    <div className="min-h-screen pb-24">
+       {/* ... existing header and nav ... */}
+       {sheet && <ProjectsSheet onClose={() => setSheet(false)} />}
+       {showWelcome && <WelcomeOverlay onClose={dismissWelcome} />} 
+    </div>
+  );
+}
+
+  
   return (
     <div className="min-h-screen pb-24">
       <header className="no-print sticky top-0 z-40 bg-ink text-white">
