@@ -64,14 +64,20 @@ export const useStore = create<Store>()((set, get) => {
   const listProjects = async (): Promise<ProjectStub[]> =>
     (await db.projects.orderBy('updatedAt').reverse().toArray()).map(({ id, name, updatedAt }) => ({ id, name, updatedAt }));
 
-  const mutate = (recipe: (p: Project) => void) => {
-    const p = structuredClone(get().project);
+const mutate = (recipe: (p: Project) => void) => {
+    const current = get().project;
+    const p: Project = { 
+        ...current, 
+        zones: [...current.zones], 
+        nodes: [...current.nodes], 
+        conduits: [...current.conduits] 
+    };
     recipe(p);
     p.updatedAt = Date.now();
     set({ project: p });
     persist();
   };
-
+  
   const adopt = async (p: Project) => {
     set({ project: p, tab: 'topology', section: 'zones', focusId: null });
     try {
