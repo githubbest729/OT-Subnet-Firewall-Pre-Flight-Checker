@@ -160,22 +160,22 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
   const { list: R, lanes } = useMemo(() => routes(project, L.boxes, L.right), [project, L]);
   const width = Math.max(L.width, L.right + 50 + lanes * 32);
 
-  if (project.zones.length === 0) {
+ if (project.zones.length === 0) {
     return (
       <div className="overflow-auto rounded-lg border-2 border-ink bg-[#f5f7f8]" style={{ height: '360px' }}>
         <svg width="100%" height="100%" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
           {/* L3 Ghost Zone */}
-          <g onClick={() => onAddZone?.(3)} className="cursor-pointer group">
-            <rect x="200" y="50" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
-            <text x="400" y="105" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
+          <g style={{ cursor: 'pointer' }}>
+            <rect onClick={() => onAddZone?.(3)} x="200" y="50" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal" />
+            <text x="400" y="105" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold" style={{ pointerEvents: 'none' }}>
               + Add L3 Site Operations Zone
             </text>
           </g>
           
           {/* L1 Ghost Zone */}
-          <g onClick={() => onAddZone?.(1)} className="cursor-pointer group">
-            <rect x="200" y="200" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
-            <text x="400" y="255" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
+          <g style={{ cursor: 'pointer' }}>
+            <rect onClick={() => onAddZone?.(1)} x="200" y="200" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal" />
+            <text x="400" y="255" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold" style={{ pointerEvents: 'none' }}>
               + Add L1 Basic Control Zone
             </text>
           </g>
