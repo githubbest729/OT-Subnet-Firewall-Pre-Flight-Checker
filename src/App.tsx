@@ -18,7 +18,9 @@ const TABS: { id: Tab; label: string; icon: typeof CalcIcon }[] = [
 ];
 
 function ProjectsSheet({ onClose }: { onClose: () => void }) {
-  const { projects, project, openProject, createProject, loadDemo, deleteProject } = useStore();
+  // Added patchProject to the store variables
+  const { projects, project, openProject, createProject, loadDemo, deleteProject, patchProject } = useStore();
+  
   return (
     <div className="no-print fixed inset-0 z-50 flex items-start justify-center bg-ink/70 p-4" role="dialog" aria-modal="true" aria-label="Projects" onClick={onClose}>
       <div className="mt-8 w-full max-w-xl rounded-lg border-2 border-ink bg-white p-4" onClick={(e) => e.stopPropagation()}>
@@ -36,12 +38,28 @@ function ProjectsSheet({ onClose }: { onClose: () => void }) {
         </div>
         <ul className="space-y-2">
           {projects.map((p) => (
-            <li key={p.id} className={cx('flex items-center gap-2 rounded-md border-2 p-2', p.id === project.id ? 'border-ink bg-signal/30' : 'border-steel-dark')}>
-              <button type="button" className="min-h-12 flex-1 text-left" onClick={() => void openProject(p.id).then(onClose)}>
-                <span className="block font-bold">{p.name || 'Untitled'}</span>
-                <span className="text-sm">{new Date(p.updatedAt).toLocaleString()}</span>
-              </button>
-              {p.id !== project.id && <DeleteBtn label="Delete" onConfirm={() => void deleteProject(p.id)} />}
+            <li key={p.id} className={cx('flex flex-col gap-1 rounded-md border-2 p-2', p.id === project.id ? 'border-ink bg-signal/30' : 'border-steel-dark')}>
+              <div className="flex items-center gap-2">
+                <button type="button" className="min-h-12 flex-1 text-left" onClick={() => void openProject(p.id).then(onClose)}>
+                  {p.id !== project.id && <span className="block font-bold">{p.name || 'Untitled'}</span>}
+                  <span className="text-sm">{new Date(p.updatedAt).toLocaleString()}</span>
+                </button>
+                {p.id !== project.id && <DeleteBtn label="Delete" onConfirm={() => void deleteProject(p.id)} />}
+              </div>
+              
+              {/* NEW: Text box to instantly rename the currently active project */}
+              {p.id === project.id && (
+                <div className="pb-1 pr-2">
+                  <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-ink/70">Project Name</label>
+                  <input
+                    type="text"
+                    className="w-full rounded-md border-2 border-ink px-3 py-2 font-bold focus:border-signal focus:outline-none"
+                    placeholder="Name this project..."
+                    value={project.name}
+                    onChange={(e) => patchProject({ name: e.target.value })}
+                  />
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -49,7 +67,6 @@ function ProjectsSheet({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-
 function WelcomeOverlay({ onClose }: { onClose: () => void }) {
   const { createProject, loadDemo } = useStore();
   
