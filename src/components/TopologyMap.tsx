@@ -169,7 +169,7 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
         <svg width="100%" height="100%" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
           {/* L3 Ghost Zone */}
           <g onClick={() => onAddZone?.(3)} className="cursor-pointer group">
-            <rect x="200" y="50" w="400" h="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
+            <rect x="200" y="50" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
             <text x="400" y="105" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
               + Add L3 Site Operations Zone
             </text>
@@ -177,7 +177,7 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
           
           {/* L1 Ghost Zone */}
           <g onClick={() => onAddZone?.(1)} className="cursor-pointer group">
-            <rect x="200" y="200" w="400" h="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
+            <rect x="200" y="200" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
             <text x="400" y="255" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
               + Add L1 Basic Control Zone
             </text>
