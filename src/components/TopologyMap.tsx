@@ -1,6 +1,6 @@
 import { Cloud, Cpu, Database, Monitor, Network, Router, Server, Shield, type LucideIcon } from 'lucide-react';
 import { useMemo } from 'react';
-import { LEVELS, type NodeType } from '../lib/rules';
+import { LEVELS, type NodeType, type PurdueLevel } from '../lib/rules';
 import type { Conduit, NetNode, Project, Zone } from '../lib/schema';
 import type { Finding } from '../lib/validate';
 
@@ -89,7 +89,6 @@ interface Route {
 }
 
 function routes(p: Project, boxes: Map<string, Box>, right: number): { list: Route[]; lanes: number } {
-  // spread conduits that share a zone edge so lines do not stack on top of each other
   const ends = new Map<string, string[]>();
   const push = (key: string, id: string) => ends.set(key, [...(ends.get(key) ?? []), id]);
   const usable = p.conduits.filter((c) => c.fromZoneId !== c.toZoneId && boxes.has(c.fromZoneId) && boxes.has(c.toZoneId));
@@ -109,8 +108,6 @@ function routes(p: Project, boxes: Map<string, Box>, right: number): { list: Rou
     return (list.indexOf(id) - (list.length - 1) / 2) * 22;
   };
 
-  // conduits that skip Purdue levels run down a lane to the right of the zones,
-  // so they never pass behind (and appear to touch) an intermediate zone
   const longIds = usable.filter((c) => Math.abs(boxes.get(c.fromZoneId)!.band - boxes.get(c.toZoneId)!.band) > 1).map((c) => c.id);
 
   const list = usable.map((c): Route => {
@@ -155,7 +152,7 @@ interface Props {
   onZone: (id: string) => void;
   onNode: (id: string) => void;
   onConduit: (id: string) => void;
-  onAddZone?: (level: number) => void; 
+  onAddZone?: (level: PurdueLevel) => void;
 }
 
 export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onConduit, onAddZone }: Props) {
