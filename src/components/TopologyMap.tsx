@@ -166,7 +166,7 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
         <svg width="100%" height="100%" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
           
           {/* New Bouncing Helper Pop-up */}
-          <g className="animate-bounce" style={{ pointerEvents: 'none' }}>
+         <g style={{ pointerEvents: 'none' }}>
             <rect x="300" y="2" width="200" height="34" rx="17" fill="#14181c" />
             <path d="M 400 44 L 390 35 L 410 35 Z" fill="#14181c" />
             <text x="400" y="24" textAnchor="middle" fill="#ffffff" fontSize="13.5" fontWeight="bold">
