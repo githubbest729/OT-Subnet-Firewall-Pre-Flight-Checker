@@ -164,9 +164,19 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
     return (
       <div className="overflow-auto rounded-lg border-2 border-ink bg-[#f5f7f8]" style={{ height: '360px' }}>
         <svg width="100%" height="100%" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
+          
+          {/* New Bouncing Helper Pop-up */}
+          <g className="animate-bounce" style={{ pointerEvents: 'none' }}>
+            <rect x="300" y="2" width="200" height="34" rx="17" fill="#14181c" />
+            <path d="M 400 44 L 390 35 L 410 35 Z" fill="#14181c" />
+            <text x="400" y="24" textAnchor="middle" fill="#ffffff" fontSize="13.5" fontWeight="bold">
+              Click a dashed box to begin
+            </text>
+          </g>
+
           {/* L3 Ghost Zone */}
           <g style={{ cursor: 'pointer' }}>
-            <rect onClick={() => onAddZone?.(3)} x="200" y="50" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal" />
+            <rect onClick={() => onAddZone?.(3)} x="200" y="50" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal transition-colors duration-200" />
             <text x="400" y="105" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold" style={{ pointerEvents: 'none' }}>
               + Add L3 Site Operations Zone
             </text>
@@ -174,7 +184,7 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
           
           {/* L1 Ghost Zone */}
           <g style={{ cursor: 'pointer' }}>
-            <rect onClick={() => onAddZone?.(1)} x="200" y="200" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal" />
+            <rect onClick={() => onAddZone?.(1)} x="200" y="200" width="400" height="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="hover:stroke-signal transition-colors duration-200" />
             <text x="400" y="255" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold" style={{ pointerEvents: 'none' }}>
               + Add L1 Basic Control Zone
             </text>
@@ -186,7 +196,7 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
       </div>
     );
   }
-
+  
   const zoneDomainOf = (z: Zone) => LEVELS.find((l) => l.level === z.level)?.domain ?? 'OT';
   const zoneName = (id: string) => project.zones.find((z) => z.id === id)?.name ?? '';
 
