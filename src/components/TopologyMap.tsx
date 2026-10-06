@@ -155,7 +155,7 @@ interface Props {
   onZone: (id: string) => void;
   onNode: (id: string) => void;
   onConduit: (id: string) => void;
-  onAddZone?: (level: number) => void; // ADDED THIS PROP
+  onAddZone?: (level: number) => void; 
 }
 
 export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onConduit, onAddZone }: Props) {
@@ -163,7 +163,6 @@ export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onCond
   const { list: R, lanes } = useMemo(() => routes(project, L.boxes, L.right), [project, L]);
   const width = Math.max(L.width, L.right + 50 + lanes * 32);
 
-  // New Empty State Render Block
   if (project.zones.length === 0) {
     return (
       <div className="overflow-auto rounded-lg border-2 border-ink bg-[#f5f7f8]" style={{ height: '360px' }}>
