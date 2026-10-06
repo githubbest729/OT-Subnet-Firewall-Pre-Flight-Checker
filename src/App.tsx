@@ -94,17 +94,23 @@ export default function App() {
   
   const v = useMemo(() => validateProject(project), [project]);
 
+  // FIX: Load the database ONLY on mount, never on zone updates
   useEffect(() => {
-    void init().then(() => {
+    void init();
+    void navigator.storage?.persist?.();
+  }, [init]);
+
+  // FIX: Handle welcome screen logic separately
+  useEffect(() => {
+    if (ready) {
       if (project.zones.length === 0 && !localStorage.getItem('welcomed')) {
         setShowWelcome(true);
       }
       if (project.zones.length === 0 && !localStorage.getItem('guide_seen')) {
         setShowGuide(true);
       }
-    });
-    void navigator.storage?.persist?.();
-  }, [init, project.zones.length]);
+    }
+  }, [ready, project.zones.length]);
 
   const dismissWelcome = () => {
     localStorage.setItem('welcomed', '1');
