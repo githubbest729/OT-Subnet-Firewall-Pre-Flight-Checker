@@ -155,17 +155,38 @@ interface Props {
   onZone: (id: string) => void;
   onNode: (id: string) => void;
   onConduit: (id: string) => void;
+  onAddZone?: (level: number) => void; // ADDED THIS PROP
 }
 
-export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onConduit }: Props) {
+export function TopologyMap({ project, byTarget, focusId, onZone, onNode, onConduit, onAddZone }: Props) {
   const L = useMemo(() => layout(project), [project]);
   const { list: R, lanes } = useMemo(() => routes(project, L.boxes, L.right), [project, L]);
   const width = Math.max(L.width, L.right + 50 + lanes * 32);
 
+  // New Empty State Render Block
   if (project.zones.length === 0) {
     return (
-      <div className="flex h-56 items-center justify-center rounded-lg border-2 border-dashed border-ink bg-white p-6 text-center">
-        <p className="max-w-sm text-lg font-semibold">The map is empty. Add a zone below to place it on its Purdue level.</p>
+      <div className="overflow-auto rounded-lg border-2 border-ink bg-[#f5f7f8]" style={{ height: '360px' }}>
+        <svg width="100%" height="100%" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
+          {/* L3 Ghost Zone */}
+          <g onClick={() => onAddZone?.(3)} className="cursor-pointer group">
+            <rect x="200" y="50" w="400" h="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
+            <text x="400" y="105" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
+              + Add L3 Site Operations Zone
+            </text>
+          </g>
+          
+          {/* L1 Ghost Zone */}
+          <g onClick={() => onAddZone?.(1)} className="cursor-pointer group">
+            <rect x="200" y="200" w="400" h="100" rx="8" fill="white" stroke="#14181c" strokeWidth="2" strokeDasharray="6 6" className="group-hover:stroke-signal" />
+            <text x="400" y="255" textAnchor="middle" fill="#14181c" fontSize="18" fontWeight="bold">
+              + Add L1 Basic Control Zone
+            </text>
+          </g>
+          
+          {/* Connecting line */}
+          <path d="M 400 150 V 200" fill="none" stroke="#14181c" strokeWidth="3" strokeDasharray="6 6" />
+        </svg>
       </div>
     );
   }
