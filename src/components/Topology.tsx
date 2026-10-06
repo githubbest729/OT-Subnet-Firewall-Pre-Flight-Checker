@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Plus, X } from 'lucide-react';
+import { ArrowLeftRight, Info, Plus, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { ipToInt, parseCidr } from '../lib/netmath';
 import { conduitPortRows, type ValidationResult } from '../lib/validate';
@@ -51,7 +51,21 @@ function ZoneCard({ id, v }: { id: string; v: ValidationResult }) {
       </div>
 
       <div>
-        <span className="mb-1 block text-sm font-semibold">Target security level (IEC 62443 SL-T)</span>
+        <div className="mb-1 flex items-center gap-2">
+          <span className="block text-sm font-semibold">Target security level (IEC 62443 SL-T)</span>
+          <div className="group relative flex cursor-help items-center">
+            <Info size={16} className="text-steel-dark hover:text-ink" />
+            <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden w-72 -translate-x-1/2 rounded-md bg-ink p-3 text-xs text-white opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
+              <ul className="space-y-1">
+                <li><strong>SL-1:</strong> Casual or coincidental violation</li>
+                <li><strong>SL-2:</strong> Intentional violation with simple means</li>
+                <li><strong>SL-3:</strong> Intentional violation with sophisticated means</li>
+                <li><strong>SL-4:</strong> Intentional violation with extended resources</li>
+              </ul>
+              <div className="absolute left-1/2 top-full -mt-1 h-3 w-3 -translate-x-1/2 rotate-45 bg-ink" />
+            </div>
+          </div>
+        </div>
         <Segmented
           label="Security level target"
           value={zone.slTarget}
@@ -298,6 +312,7 @@ export function Topology({ v }: { v: ValidationResult }) {
         onZone={(id) => focus('zones', id)}
         onNode={(id) => focus('nodes', id)}
         onConduit={(id) => focus('conduits', id)}
+        onAddZone={(level) => focus('zones', addZone(level))}
       />
       <p className="text-sm">Tap a zone, device or conduit on the map to edit it. Red outlines and dashed lines are blocking faults.</p>
 
