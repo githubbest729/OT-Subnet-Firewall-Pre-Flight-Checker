@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import type { PurdueLevel, NodeType } from './lib/rules';
-import { LEVEL_META } from './lib/rules';
+import { LEVELS, type PurdueLevel, type NodeType } from './lib/rules';
 import { db, demoProject, newProject, uid, type Conduit, type NetNode, type Project, type Zone } from './lib/schema';
 
 export type Tab = 'calc' | 'topology' | 'ports' | 'dashboard' | 'export';
@@ -135,7 +134,7 @@ export const useStore = create<Store>()((set, get) => {
       mutate((p) =>
         p.zones.push({
           id,
-          name: (LEVEL_META.get(level)?.label ?? 'Zone').replace(/^Level [\d.]+ - /, ''),
+          name: (LEVELS.find((l) => l.level === level)?.label ?? 'Zone').replace(/^Level [\d.]+ - /, ''),
           level,
           slTarget: level >= 4 ? 2 : 3,
           subnets: [],
